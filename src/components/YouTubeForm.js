@@ -1,5 +1,5 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
 let renderCount = 0;
@@ -19,7 +19,8 @@ const YouTubeForm = () => {
                 twitter: "",
                 facebook: ""
             },
-            phoneNumbers: ["", ""]
+            phoneNumbers: ["", ""],
+            phNumbers: [{ number: '' }],
         }
     });
 
@@ -41,6 +42,11 @@ const YouTubeForm = () => {
 
     //This is one possible way to use register.
     // const { name, ref, onChange, onBlur } = register("username")
+
+    const { fields, append, remove } = useFieldArray({
+        name: 'phNumbers',
+        control
+    })
 
     const onSubmit = (data) => {
         console.log("Form Submitted", data);
@@ -147,7 +153,7 @@ const YouTubeForm = () => {
                 </div>
 
                 <div className='form-control'>
-                    <label htmlFor="secondary-phone">Primary phone number</label>
+                    <label htmlFor="secondary-phone">Secondary phone number</label>
                     <input
                         type="text"
                         id="secondary-phone"
@@ -155,6 +161,22 @@ const YouTubeForm = () => {
                     />
                 </div>
 
+                <div>
+                    <label>List of phone numbers</label>
+                    <div>
+                        {fields.map((field, index) => (
+                            <div className='form-control' key={field.id}>
+                                <input type='text' {...register(`phNumbers.$(index).name`)} />
+                                {
+                                    index > 0 && (
+                                        <button type='button' onClick={() => remove(index)}>Remove</button>
+                                    )
+                                }
+                            </div>
+                        ))}
+                        <button type='button' onClick={() => append({number: ""})}>Add phone number</button>
+                    </div>
+                </div>
                 <button>Submit</button>
             </form>
             <DevTool control={control} />
