@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 
@@ -39,7 +39,7 @@ const YouTubeForm = () => {
     //     }
     // })
 
-    const { register, control, handleSubmit, formState } = form;
+    const { register, control, handleSubmit, formState, watch } = form;
     const { errors } = formState;
 
     //This is one possible way to use register.
@@ -54,11 +54,22 @@ const YouTubeForm = () => {
         console.log("Form Submitted", data);
     }
 
+    // const watchUsername = watch("username");
+    // const watchForm = watch();
+
+    useEffect(() => {
+        const subscription = watch((value) => {
+            console.log(value);
+        });
+
+        // return () => subscription.unsubscribe();
+    })
+
     renderCount++;
     return (
         <div>
             <h2>YouTube Form ({renderCount / 2})</h2>
-
+            {/* <h3>Watchedvalue: {JSON.stringify(watchForm)}</h3> */}
             <form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <div className='form-control'>
                     <label htmlFor="username">Username</label>
