@@ -39,7 +39,7 @@ const YouTubeForm = () => {
     //     }
     // })
 
-    const { register, control, handleSubmit, formState, watch } = form;
+    const { register, control, handleSubmit, formState, watch, getValues, setValue } = form;
     const { errors } = formState;
 
     //This is one possible way to use register.
@@ -65,6 +65,18 @@ const YouTubeForm = () => {
         // return () => subscription.unsubscribe();
     })
 
+    const handleGetvalues = () => {
+        console.log("Get Values: ", getValues());
+    }
+
+    const handleSetvalue = () => {
+        setValue("username", "", {
+            shouldValidate: true,
+            shouldTouch: true,
+            shouldDirty: true
+        })
+    }
+
     renderCount++;
     return (
         <div>
@@ -77,7 +89,10 @@ const YouTubeForm = () => {
                         type="text"
                         id="username"
                         {...register("username", {
-                            required: "Username is required",
+                            required: {
+                                value: true,
+                                message: "Username is required"
+                            }
                         })}
                     />
                     <p className='error'>{errors.username?.message}</p>
@@ -224,6 +239,8 @@ const YouTubeForm = () => {
                 </div>
 
                 <button>Submit</button>
+                <button onClick={handleGetvalues}>Get values</button>
+                <button onClick={handleSetvalue}>Set value</button>
             </form>
             <DevTool control={control} />
         </div>
